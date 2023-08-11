@@ -1,6 +1,9 @@
 // interviewController.js (controllers/interviewController.js)
 const Interview = require('../models/interviewModel');
 
+class MagicNums {
+  static ONE = 1;
+}
 // Controller function to get all interviews
 
 exports.createInterview = async (req, res) => {
@@ -15,7 +18,7 @@ exports.createInterview = async (req, res) => {
 
 exports.getAllInterviews = async (req, res) => {
   try {
-    const interviews = await Interview.find().sort({dateTime: -1});
+    const interviews = await Interview.find();
     res.status(200).json(interviews);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch interviews', err });
@@ -23,12 +26,13 @@ exports.getAllInterviews = async (req, res) => {
 };
 
 exports.getAllInterviewsWithPagination = async (req, res) => {
+
   try {
     const { page, limit } = req.query;
     const pageNumber = parseInt(page);
     const itemsPerPage = parseInt(limit);
 
-    const skip = (pageNumber - 1) * itemsPerPage;
+    const skip = (pageNumber - MagicNums.ONE) * itemsPerPage;
     const totalInterviews = await Interview.countDocuments();
     const interviews = await Interview.find()
       .skip(skip)

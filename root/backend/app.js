@@ -1,33 +1,28 @@
 // app.js
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const interviewRoutes = require('./routes/interviewRoutes');
 const cors = require('cors');
-const corsOptions = require('./config/corsOptions')
-
+const corsOptions = require('./config/corsOptions');
+const {PORT, MONGODB_URI, FRONTEND_URI} = require('./config/envConfig');
+const connectToMongoDB = require('./config/db')
 const app = express();
 app.use(cors(corsOptions));
-const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(bodyParser.json());
-console.log('Enabled CORS -> Allowed domain :: Frontend Server : http://localhost:5173')
+console.log(`Enabled CORS -> Allowed domain :: Frontend Server : ${FRONTEND_URI}`)
 
 // Connect to MongoDB (Assuming your database is named 'RakshitFeedbackTesting')
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/RaskhitFeedbackTesting', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
+connectToMongoDB.then(() => {
   console.log('Connected to MongoDB');
 })
 .catch((err) => {
   console.error('Error connecting to MongoDB:', err);
-});
+});;
 
 // API routes
-app.use('/api', interviewRoutes);
+app.use('/api/v1', interviewRoutes);
 
 // Error handling middleware (assuming there is no custom error handling)
 app.use((err, req, res, next) => {

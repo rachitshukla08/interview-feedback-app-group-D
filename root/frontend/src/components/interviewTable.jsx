@@ -6,7 +6,7 @@ const InterviewTable = () => {
   const [interviews, setInterviews] = useState([]);
 
   useEffect(() => {
-   axios.get('http://localhost:5000/api/interviews')
+   axios.get('http://localhost:5000/api/v1/interviews')
       .then(response => {
         console.log(response);
         setInterviews(response.data);

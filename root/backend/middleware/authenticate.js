@@ -1,5 +1,5 @@
 // middleware/authMiddleware.js
-require('dotenv').config();
+const envConfig = require('../config/envConfig')
 const jwt = require('jsonwebtoken');
 
 // Middleware function to verify admin's JWT token
@@ -12,7 +12,7 @@ const authenticateAdmin = (req, res, next) => {
 
   try {
     // Verify the token and get the admin's ID from it
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, envConfig.YOU_KNOW_WHO);
     req.adminId = decoded.adminId;
     next();
   } catch (err) {
